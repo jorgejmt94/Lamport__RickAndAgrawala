@@ -3,6 +3,8 @@ package RicartaAndAgrawala;
 import java.io.IOException;
 import java.net.DatagramSocket;
 
+import static java.lang.Thread.sleep;
+
 public class ProcessB {
     public static DatagramSocket processB;
     public static final int MAX_CONNECTIONS = 2;
@@ -25,6 +27,9 @@ public class ProcessB {
                 if (mssg.getMode() == Message.TOKEN) haveToken = true;
                 //sleep(3000);
             }
+            System.out.println("[DEBUG] Tinc el Token");
+            sleep(3000);
+
 
             /*
                 RicartaAndAgrawala

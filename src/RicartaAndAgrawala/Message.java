@@ -13,8 +13,8 @@ public class Message {
     public static int A_PORT = 1110;
     public static int B_PORT = 2220;
 
-    public static int LWB1 = 20;
-    public static int LWB2 = 21;
+    public static int LWB1 = 0;
+    public static int LWB2 = 1;
 
     public static int LWB1_PORT = 2221;
     public static int LWB2_PORT = 2222;

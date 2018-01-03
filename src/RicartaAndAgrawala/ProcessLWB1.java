@@ -2,13 +2,14 @@ package RicartaAndAgrawala;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.SocketException;
+
+import static java.lang.Thread.sleep;
 
 public class ProcessLWB1 {
 
     public static DatagramSocket processLWB;
 
-    public static void main(String[] args) throws SocketException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         processLWB = new DatagramSocket(Message.LWB1_PORT);
         Message mssg;
@@ -21,13 +22,13 @@ public class ProcessLWB1 {
                     try {
                         Message.sendMessage(processLWB, message, Message.LWB1_PORT);
                     } catch (IOException e) {
-                        System.out.println("sendMessage LWA1_PORT Catch");
+                        System.out.println("sendMessage LWB1_PORT Catch");
                     }
                 if (pid == Message.LWB2)
                     try {
                         Message.sendMessage(processLWB, message, Message.LWB2_PORT);
                     } catch (IOException e) {
-                        System.out.println("sendMessage LWA2_PORT Catch");
+                        System.out.println("sendMessage LWB2_PORT Catch");
                     }
             }
 
@@ -48,22 +49,46 @@ public class ProcessLWB1 {
                         switch (message.getMode()){
                             case Message.REQUEST:
                                 handleMsg(message);
-                                System.out.println("[DEBUG] <--LWA2 REQUEST");
+                                System.out.println("[DEBUG] <--LWB2 REQUEST");
                                 break;
                             case Message.OKAY:
                                 handleMsg(message);
-                                System.out.println("[DEBUG] <--LWA2 OKAY");
+                                System.out.println("[DEBUG] <--LWB2 OKAY");
                                 break;
                             default:
                                 System.out.println("Default");
                         }
                     }
-
                 } catch (IOException e) {
                     System.out.println("MyWait catch");
                 }
             }
         };
+
+
+        while (true){
+            boolean start = false;
+            //esperar al proces B
+            while (!start){
+
+                mssg = Message.receiveMessage(processLWB);
+                if (mssg.getMode() == Message.INIT) start = true;
+            }
+            raMutex.requestCS();
+
+            mssg = new Message(Message.TO_SCREEN, "Sóc el procés LWB1" , Message.LWB1);
+            for (int i = 0; i < 10; i++) {
+                Message.sendMessage(processLWB, mssg, Message.B_PORT);
+                sleep(1000);
+            }
+
+            raMutex.releaseCS();
+
+            //notificar proces B que ja he acabat
+            mssg = new Message(Message.FINISHED, timeStamp, Message.LWB1);
+            Message.sendMessage(processLWB, mssg, Message.B_PORT);
+
+        }
 
 
     }

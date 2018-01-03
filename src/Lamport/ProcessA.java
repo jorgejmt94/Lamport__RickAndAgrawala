@@ -24,7 +24,7 @@ public class ProcessA {
             /*
                     ->  COMUNICACIO PROCCESSOS LWA  <-
              */
-/*
+
             int finishedProc = 0;
             //LWA1
             mssg = new Message(Message.INIT, timeStamp, Message.A);
@@ -49,7 +49,7 @@ public class ProcessA {
 
             System.out.println("[DEBUG]" + "Han acabat tots els processos, envio token a B");
 
-*/
+
             /*
                     ->  COMUNICACIO PROCCES B  <-
              */

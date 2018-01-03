@@ -27,9 +27,9 @@ public abstract class RAMutex {
         c.tick();
         myts = c.getValue();
         broadcastMessage(new Message(Message.REQUEST, myts, myId));
+        System.out.println("[DEBUG ] BROADCAST REQUEST ->");
         numOkay = 0;
         while (numOkay < Message.MAX_CONNECTIONS - 1){
-
             myWait();
         }
     }
@@ -39,7 +39,9 @@ public abstract class RAMutex {
         myts = Integer.MAX_VALUE;
         while(!pendingQ.isEmpty()){
             int pid = pendingQ.removeFirst();
-            sendMsg(pid, new Message(Message.OKAY, myId, c.getValue()));
+            sendMsg(pid, new Message(Message.OKAY, c.getValue(), myId));
+            System.out.println("[DEBUG] OKAY->");
+
         }
     }
 
@@ -47,11 +49,20 @@ public abstract class RAMutex {
 
         c.recieveAction(msg.getSrc(), msg.getTimeStamp());
         if(msg.getMode() == Message.REQUEST) {
-            if((myts == Integer.MAX_VALUE) || (msg.getTimeStamp() < myts) || (msg.getSrc()< myId))
-                 sendMsg(msg.getSrc(), new Message(Message.OKAY, c.getValue(), myId));
-            else pendingQ.push(msg.getSrc());
+            if((myts == Integer.MAX_VALUE) || (msg.getTimeStamp() < myts) || (msg.getSrc()< myId)){
+                System.out.println("[DEBUG] OKAY->");
+                sendMsg(msg.getSrc(), new Message(Message.OKAY, c.getValue(), myId));
 
-        }else if(msg.getMode() == Message.OKAY) numOkay++;
+            }
+            else {
+                pendingQ.push(msg.getSrc());
+                System.out.println("[DEBUG] Pending: " + msg.getSrc());
+            }
+
+        }else if(msg.getMode() == Message.OKAY) {
+            numOkay++;
+            System.out.println("[DEBUG] NUMOKAY: " + numOkay);
+        }
 
     }
 
