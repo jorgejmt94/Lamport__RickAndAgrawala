@@ -25,19 +25,19 @@ public class ProcessLWA3 {
             @Override
             public void sendMessage(int src, Message message) {
 
-                if (src == Message.LWA1_PORT)
+                if (src == Message.LWA1)
                     try {
                         Message.sendMessage(processLWA, message, Message.LWA1_PORT);
                     } catch (IOException e) {
                         System.out.println("sendMessage LWA1_PORT Catch");
                     }
-                if (src == Message.LWA2_PORT)
+                if (src == Message.LWA2)
                     try {
                         Message.sendMessage(processLWA, message, Message.LWA2_PORT);
                     } catch (IOException e) {
                         System.out.println("sendMessage LWA2_PORT Catch");
                     }
-                if (src == Message.LWA3_PORT)
+                if (src == Message.LWA3)
                     try {
                         Message.sendMessage(processLWA, message, Message.LWA3_PORT);
                     } catch (IOException e) {
